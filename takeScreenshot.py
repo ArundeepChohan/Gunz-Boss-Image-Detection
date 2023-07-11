@@ -1,0 +1,187 @@
+import subprocess
+import os 
+import time
+
+PROCNAME = "Freestyle GunZ"
+
+from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController
+from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
+keyboard = KeyboardController()
+mouse = MouseController()
+
+def dash(dir):
+    # keyboard.press(dir)
+    # time.sleep(0.05)
+    # keyboard.release(dir)
+    # time.sleep(0.05)
+    # keyboard.press(dir)
+    # time.sleep(0.05)
+    # keyboard.release(dir)
+    keyboard.type(dir)
+    keyboard.type(dir)
+
+def jump():
+    keyboard.press(Key.space)
+    keyboard.release(Key.space)
+
+def reload_shot():
+    for i in range(5):
+        keyboard.type('2')
+        time.sleep(0.10)
+        mouse.press(Button.left)
+        time.sleep(0.20)
+        mouse.release(Button.left)
+        time.sleep(0.10)
+        mouse.press(Button.button9)
+        time.sleep(0.20)
+        mouse.release(Button.button9)
+
+        keyboard.type('3')
+        time.sleep(0.10)
+        mouse.press(Button.left)
+        time.sleep(0.20)
+        mouse.release(Button.left)
+        time.sleep(0.10)
+        mouse.press(Button.button9)
+        time.sleep(0.10)
+        mouse.release(Button.button9)
+
+def butterfly():
+    jump()
+    time.sleep(0.05)
+    dash('w')
+    mouse.press(Button.left)
+    time.sleep(0.01)
+    mouse.release(Button.left)
+    time.sleep(0.01)
+    mouse.press(Button.right)
+    time.sleep(0.01)
+    mouse.release(Button.right)
+    time.sleep(0.01)
+
+#Jump, Dash, Slash, Swap weapon, Shoot, then back to sword(optional)
+def slash_shot():
+    keyboard.type('1')
+
+    jump()
+    time.sleep(0.05)
+    dash('w')
+
+    mouse.press(Button.left)
+    time.sleep(0.05)
+    keyboard.type('e')
+    time.sleep(0.05)
+    mouse.press(Button.left)
+    mouse.release(Button.left)
+
+    keyboard.type('1')
+
+# slash, switch, shoot+reload, sword
+def gear_tap():
+    keyboard.type('1')
+
+    jump()
+    time.sleep(0.05)
+
+    mouse.press(Button.left)
+    # time.sleep(0.05)
+    keyboard.type('e')
+    time.sleep(0.30)
+    mouse.release(Button.left)
+    time.sleep(0.05)
+    keyboard.type('1')
+    time.sleep(0.1)
+    
+    dash('w')
+
+def speedy():
+    for i in range(10000):
+        mouse.press(Button.left)
+        time.sleep(0.001)
+        mouse.release(Button.left)
+        time.sleep(0.001)
+
+def block():
+    for i in range(10000):
+        mouse.press(Button.right)
+        time.sleep(0.001)
+        mouse.release(Button.right)
+        time.sleep(0.001)
+
+# I think it's 1 second jump length
+def jump_time():
+    for i in range(10):
+        keyboard.press(Key.space)
+        keyboard.release(Key.space)
+        time.sleep(1)
+
+# dash with alt fire
+def eflip(dir):
+    
+    keyboard.press(dir)
+    time.sleep(0.05)
+    keyboard.release(dir)
+    time.sleep(0.05)
+    keyboard.press(dir)
+    time.sleep(0.01)
+    keyboard.press('r')
+    time.sleep(0.05)
+    keyboard.release(dir)
+    time.sleep(0.01)
+    keyboard.release('r')
+    # mouse.click(Button.button10)
+    # mouse.press(Button.button10)
+    
+    # mouse.release(Button.button10)
+    
+    
+
+def move_to_cordinates():
+    for i in range(100):
+        keyboard.press('w')
+        time.sleep(0.05)
+        keyboard.release('w')
+        time.sleep(0.05)
+        keyboard.press('w')
+        time.sleep(0.15)
+        keyboard.release('w')
+
+# Some helper functions to find button presses
+# def on_press(key):
+#     print('{0} pressed'.format(key))
+
+# def on_release(key):
+#     print('{0} release'.format(key))
+#     if key == Key.enter:
+#         return False
+# with KeyboardListener(on_press=on_press, on_release=on_release) as listener:
+#     listener.join()
+
+# def on_click(x, y, button, pressed):
+#     if pressed:
+#         print ('Mouse clicked {2}'.format(x, y, button))
+
+
+# with MouseListener(on_click=on_click) as listener:
+#     listener.join()
+
+try:
+    results = subprocess.check_output("wmctrl -lp | awk '/Freestyle GunZ/ { print $1 }'",shell=True,stderr=subprocess.STDOUT)
+    result = results.decode("ascii")
+    print(result)
+    os.system("wmctrl -iR "+result)
+    time.sleep(5)
+    # move_to_cordinates()
+    # reload_shot()
+    # butterfly()
+    # slash_shot()
+    # gear_tap()
+    #speedy()
+    block()
+    # eflip('w')
+    #"xwd -id"+result+ "| convert xwd:- image.png"
+    command = "xwd -root | convert xwd:- image.png"
+    os.system(command)
+
+except subprocess.CalledProcessError as e:
+    raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))

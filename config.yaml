@@ -1,0 +1,7 @@
+path: /home/arundeep/Desktop/GunzBossImageDetection/datasets
+train: ../train/images
+val: ../val/images
+
+# Classes
+nc: 1
+names: ["gkk"]
