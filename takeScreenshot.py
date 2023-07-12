@@ -110,12 +110,12 @@ def block():
 
 # I think it's 1 second jump length
 def jump_time():
-    for i in range(10):
+    while(action):
         keyboard.press(Key.space)
         keyboard.release(Key.space)
         time.sleep(1)
 
-# dash with alt fire
+# dash with alt fire (todo)
 def eflip(dir):
     
     keyboard.press(dir)
@@ -131,10 +131,7 @@ def eflip(dir):
     keyboard.release('r')
     # mouse.click(Button.button10)
     # mouse.press(Button.button10)
-    
     # mouse.release(Button.button10)
-    
-    
 
 def move_to_cordinates():
     for i in range(100):
@@ -147,15 +144,17 @@ def move_to_cordinates():
         keyboard.release('w')
 
 # Some helper functions to find button presses
-# def on_press(key):
-#     print('{0} pressed'.format(key))
+def on_press(key):
+    print('{0} pressed'.format(key))
 
-# def on_release(key):
-#     print('{0} release'.format(key))
-#     if key == Key.enter:
-#         return False
-# with KeyboardListener(on_press=on_press, on_release=on_release) as listener:
-#     listener.join()
+# Unblock the program if presses fail
+    print('{0} release'.format(key))
+    if key == 'k':
+        quit()
+        #return False
+        
+listener = KeyboardListener(on_press=on_press, on_release=on_release) 
+listener.start()
 
 # def on_click(x, y, button, pressed):
 #     if pressed:
@@ -171,13 +170,14 @@ try:
     print(result)
     os.system("wmctrl -iR "+result)
     time.sleep(5)
+
     # move_to_cordinates()
     # reload_shot()
     # butterfly()
     # slash_shot()
     # gear_tap()
-    #speedy()
-    block()
+    speedy()
+    # block()
     # eflip('w')
     #"xwd -id"+result+ "| convert xwd:- image.png"
     command = "xwd -root | convert xwd:- image.png"

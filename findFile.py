@@ -9,6 +9,7 @@ def find(name, path):
 #print(os.path.abspath(os.sep))
 os.chdir(os.path.abspath(os.sep))
 cwd = os.getcwd()
+print('Root folder of the os system: ',cwd)
 
 from pathlib import Path
 from bs4 import BeautifulSoup as bs
@@ -16,67 +17,75 @@ from pynput.keyboard import Key,Listener as KeyboardListener, Controller as Keyb
 from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
 keyboard = KeyboardController()
 mouse = MouseController()
+
 """
 Use default settings in case config.xml is missing. 
 Furthermore find a way to transcript the values gotten from the file into mouse/keyboard values
+<enum 'Key'> <class 'str'> <enum 'Button'>
+
 """
-moves_setting={
-'useweapon':'e',
-'useweapon2':'q',
-'prevousweapon':-1,
-'nextweapon': -1,
-'foward':'w',
-'back':'s',
-'left':'a',
-'right':'d',
-'sword':'1',
-'primaryweapon':'2',
-'secondaryweapon':'3',
-'item1':'4',
-'item2':'5',
-'communityitem1':-1,
-'communityitem2':-1,
-'reload':'r',
-'jump':-1,
-'score':-1,
-'menu':-1,
-'taunt':-1,
-'bow':-1,
-'wave':-1,
-'laugh':-1,
-'cry':-1,
-'dance':-1,
-'screenshot':-1,
-'record':-1,
-'movingpicture':-1,
-'defence':-1,
-'togglechat':-1,
-'mousesensitivitydec':-1,
-'mousesensitivityinc':-1,
-'previoussong':-1,
-'nextsong':-1,
-'teamchat':-1,
-'pingsystem':-1,
+moves_setting = {
+'USEWEAPON':'e',
+'USEWEAPON2':'q',
+'PREVOUSWEAPON':-1,
+'NEXTWEAPON': -1,
+'FORWARD':'w',
+'BACK':'s',
+'LEFT':'a',
+'RIGHT':'d',
+'MELEEWEAPON':'1',
+'PRIMARYWEAPON':'2',
+'SECONDARYWEAPON':'3',
+'ITEM1':'4',
+'ITEM2':'5',
+'COMMUNITYITEM1':-1,
+'COMMUNITYITEM2':-1,
+'RELOAD':'r',
+'JUMP': Key.space,
+'SCORE':-1,
+'MENU':-1,
+'TAUNT':-1,
+'BOW':-1,
+'WAVE':-1,
+'LAUGH':-1,
+'CRY':-1,
+'DANCE':-1,
+'SCREENSHOT': Key.f12,
+'RECORD': Key.f11,
+'MOVINGPICTURE':-1,
+'DEFENCE': Key.shift,
+'TOGGLECHAT':-1,
+'MOUSESENSITIVITYDEC':-1,
+'MOUSESENSITIVITYINC':-1,
+'PREVIOUSSONG':-1,
+'NEXTSONG':-1,
+'TEAMCHAT':-1,
+'PINGSYSTEM':Key.alt,
 }
-for path in Path(cwd).rglob('*Freestyle GunZ'):
+
+config_path = None
+paths = Path(cwd).rglob('*Freestyle GunZ')
+
+for path in paths:
     #print(path)
     os.chdir(path)
     cwd = os.getcwd()
     try:
-        config_path=find('config.xml',os.getcwd())
+        config_path = find('config.xml',os.getcwd())
         if config_path != None:
             print(config_path)
-            content = []
             with open(config_path, "r") as file:
-                soup = bs(file.read(), features='lxml')
-                print(soup)
+                soup = bs(file.read(),'xml')
+                for key in moves_setting:
+                    print(key,soup.find(key).contents)
             break
-
+            
     # Caching the exception   
     except:
         print("Something wrong with specified\
             directory. Exception- ", sys.exc_info())
             
+
 
 
         
