@@ -1,43 +1,262 @@
- 1  ESC                              44  Z
- 2  1                                45  X
- 3  2                                46  C
- 4  3                                47  V
- 5  4                                48  B
- 6  5                                49  N
- 7  6                                50  M
- 8  7                                51  , <
- 9  8                                52  . >
-10  9                                53  / ?
-11  0                                54  RIGHT SHIFT
-12  - _                              55  *            (KEYPAD)
-13  = +                              56  LEFT ALT
-14  BACKSPACE                        57  SPACEBAR
-15  TAB                              58  CAPSLOCK
-16  Q                                59  F1
-17  W                                60  F2
-18  E                                61  F3
-19  R                                62  F4
-20  T                                63  F5
-21  Y                                64  F6
-22  U                                65  F7
-23  I                                66  F8
-24  O                                67  F9
-25  P                                68  F10
-26  [ {                              69  NUMLOCK      (KEYPAD)
-27  ] }                              70  SCROLL LOCK
-28  ENTER (RETURN)                   71  7 HOME       (KEYPAD)
-29  LEFT CONTROL                     72  8 UP         (KEYPAD)
-30  A                                73  9 PGUP       (KEYPAD)
-31  S                                74  -            (KEYPAD)
-32  D                                75  4 LEFT       (KEYPAD)
-33  F                                76  5            (KEYPAD)
-34  G                                77  6 RIGHT      (KEYPAD)
-35  H                                78  +            (KEYPAD)
-36  J                                79  1 END        (KEYPAD)
-37  K                                80  2 DOWN       (KEYPAD)
-38  L                                81  3 PGDN       (KEYPAD)
-39  ; :                              82  0 INSERT     (KEYPAD)
-40  ' "                              83  . DEL        (KEYPAD)
-41  ` ~                              87  F11
-42  LEFT SHIFT                       88  F12
-258 LEFT MOUSE BUTTON                259 RIGHT MOUSE BUTTON
+ 1  ESC                              
+ 2  1                                
+ 3  2                                
+ 4  3                                
+ 5  4                               
+ 6  5                               
+ 7  6                               
+ 8  7                                
+ 9  8                                
+10  9                                
+11  0                                
+12  - _                              
+13  = +                              
+14  BACKSPACE                        
+15  TAB                              
+16  Q                                
+17  W                                
+18  E                                
+19  R                                
+20  T                                
+21  Y                                
+22  U                                
+23  I                                
+24  O                               
+25  P                                
+26  [ {                              
+27  ] }                              
+28  ENTER (RETURN)                   
+29  LEFT CONTROL                     
+30  A                                
+31  S                                
+32  D                                
+33  F                                
+34  G                                
+35  H                                
+36  J                                
+37  K                                
+38  L                                
+39  ; :                              
+40  ' "                              
+41  ` ~                              
+42  LEFT SHIFT                       
+
+44  Z
+45  X
+46  C
+47  V
+48  B
+49  N
+50  M
+51  , <
+52  . >
+53  / ?
+54  RIGHT SHIFT
+55  *            (KEYPAD)
+56  LEFT ALT
+57  SPACEBAR
+58  CAPSLOCK
+59  F1
+60  F2
+61  F3
+62  F4
+63  F5
+64  F6
+65  F7
+66  F8
+67  F9
+68  F10
+69  NUMLOCK      (KEYPAD)
+70  SCROLL LOCK
+71  7 HOME       (KEYPAD)
+72  8 UP         (KEYPAD)
+73  9 PGUP       (KEYPAD)
+74  -            (KEYPAD)
+75  4 LEFT       (KEYPAD)
+76  5            (KEYPAD)
+77  6 RIGHT      (KEYPAD)
+78  +            (KEYPAD)
+79  1 END        (KEYPAD)
+80  2 DOWN       (KEYPAD)
+81  3 PGDN       (KEYPAD)
+82  0 INSERT     (KEYPAD)
+83  . DEL        (KEYPAD)
+
+
+
+87  F11
+88  F12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+256 SCROLL UP
+257 SCROLL DOWN
+258 LEFT MOUSE BUTTON                
+259 RIGHT MOUSE BUTTON
+260 Middle Button
+261 MB5
+262 MB4

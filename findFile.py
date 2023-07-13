@@ -1,5 +1,132 @@
 import os
 import sys
+from pathlib import Path
+from bs4 import BeautifulSoup as bs
+from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController,KeyCode
+from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
+keyboard = KeyboardController()
+mouse = MouseController()
+
+"""
+Corresponding key/mouse to 
+ 
+NUMPAD 
+3 	    51 0063 0x33
+0 	    48 0060 0x30
+. 	    46 0056 0x2e
+ENTER   13 0015 0x0d
+2 	    50 0062 0x32
+1 	    49 0061 0x31
+4 	    52 0064 0x34
+5 	    53 0065 0x35
+6 	    54 0066 0x36
++ 	    43 0053 0x2b
+9 	    57 0071 0x39
+8 	    56 0070 0x38
+7 	    55 0067 0x37
+/ 	    47 0057 0x2f
+* 	    42 0052 0x2a
+- 	    45 0055 0x2d
+
+
+
+"""
+moves_list={
+'1' : Key.esc,
+'2' : '1',
+'3' : '2',
+'4' : '3',
+'5' : '4',
+'6' : '5',
+'7' : '6',
+'8' : '7',
+'9' : '8',
+'10': '9',
+'11': '0',
+'12': '-',
+'13': '=',
+'14': Key.backspace,
+'15': Key.tab,
+'16': 'q',
+'17': 'w',
+'18': 'e',                           
+'19': 'r',                              
+'20': 't',                                
+'21': 'y',                                
+'22': 'u',                                
+'23': 'i',                                
+'24': 'o',                                
+'25': 'p',
+'26': '[',                              
+'27': ']',                               
+'28': Key.enter,                  
+'29': Key.ctrl_l,                    
+'30': 'a',                                
+'31': 's',                                
+'32': 'd',                                
+'33': 'f',                                
+'34': 'g',                                
+'35': 'h',                                
+'36': 'j',                                
+'37': 'k',                                
+'38': 'l',                                
+'39': ';',                             
+'40': "'",                             
+'41': '`',                              
+'42': Key.shift_l,
+'44': 'z',
+'45': 'x',
+'46': 'c',
+'47': 'v',
+'48': 'b',
+'49': 'n',
+'50': 'm',
+'51': ',', 
+'52': '.', 
+'53': '/', 
+'54': Key.shift_r,
+'55': 0x2A,
+'56': Key.alt_l,
+'57': Key.space,
+'58': Key.caps_lock,
+'59': Key.f1,
+'60': Key.f2,
+'61': Key.f3,
+'62': Key.f4,
+'63': Key.f5,
+'64': Key.f6,
+'65': Key.f7,
+'66': Key.f8,
+'67': Key.f9,
+'68': Key.f10,
+'69': Key.num_lock,
+'70': Key.scroll_lock,
+'71': Key.home,
+'72': Key.up,
+'73': Key.page_up,
+'74': 0x2d,            
+'75': Key.left,
+'76': 0x35,            
+'77': Key.right,     
+'78': 0x2b,            
+'79': Key.end,        
+'80': Key.down,     
+'81': Key.page_down,       
+'82': Key.insert,    
+'83': Key.delete,
+
+'87': Key.f11,
+'88': Key.f12,
+
+'256': Button.scroll_up,
+'257': Button.scroll_down,
+'258': Button.left,                
+'259': Button.right,
+'260': Button.middle,
+'261': Button.button10,
+'262': Button.button9,
+
+}
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
@@ -11,22 +138,14 @@ os.chdir(os.path.abspath(os.sep))
 cwd = os.getcwd()
 print('Root folder of the os system: ',cwd)
 
-from pathlib import Path
-from bs4 import BeautifulSoup as bs
-from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController
-from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
-keyboard = KeyboardController()
-mouse = MouseController()
-
 """
 Use default settings in case config.xml is missing. 
 Furthermore find a way to transcript the values gotten from the file into mouse/keyboard values
 <enum 'Key'> <class 'str'> <enum 'Button'>
-
 """
 moves_setting = {
-'USEWEAPON':'e',
-'USEWEAPON2':'q',
+'USEWEAPON':Button.left,
+'USEWEAPON2':Button.right,
 'PREVOUSWEAPON':-1,
 'NEXTWEAPON': -1,
 'FORWARD':'w',
@@ -42,7 +161,7 @@ moves_setting = {
 'COMMUNITYITEM2':-1,
 'RELOAD':'r',
 'JUMP': Key.space,
-'SCORE':-1,
+'SCORE':Key.tab,
 'MENU':-1,
 'TAUNT':-1,
 'BOW':-1,
@@ -55,8 +174,8 @@ moves_setting = {
 'MOVINGPICTURE':-1,
 'DEFENCE': Key.shift,
 'TOGGLECHAT':-1,
-'MOUSESENSITIVITYDEC':-1,
-'MOUSESENSITIVITYINC':-1,
+'MOUSESENSITIVITYDEC':'[',
+'MOUSESENSITIVITYINC':']',
 'PREVIOUSSONG':-1,
 'NEXTSONG':-1,
 'TEAMCHAT':-1,
@@ -77,7 +196,10 @@ for path in paths:
             with open(config_path, "r") as file:
                 soup = bs(file.read(),'xml')
                 for key in moves_setting:
-                    print(key,soup.find(key).contents)
+                    move_code = soup.find(key).contents[0]
+                    print(key,move_code)
+                    if move_code !="-1":
+                        moves_setting[key] = moves_list[move_code]
             break
             
     # Caching the exception   
@@ -85,7 +207,6 @@ for path in paths:
         print("Something wrong with specified\
             directory. Exception- ", sys.exc_info())
             
-
-
-
-        
+print(moves_setting)
+#keyboard.press(moves_setting['JUMP'])                    
+print(type(Button.left),type(Key.enter),type('w'),type(0x2A))

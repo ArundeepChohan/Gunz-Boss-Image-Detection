@@ -4,7 +4,7 @@ import time
 
 PROCNAME = "Freestyle GunZ"
 
-from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController
+from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController, KeyCode
 from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
 keyboard = KeyboardController()
 mouse = MouseController()
@@ -110,7 +110,7 @@ def block():
 
 # I think it's 1 second jump length
 def jump_time():
-    while(action):
+    for i in range(10):
         keyboard.press(Key.space)
         keyboard.release(Key.space)
         time.sleep(1)
@@ -145,13 +145,15 @@ def move_to_cordinates():
 
 # Some helper functions to find button presses
 def on_press(key):
-    print('{0} pressed'.format(key))
+    print(key.__dict__)
 
 # Unblock the program if presses fail
-    print('{0} release'.format(key))
-    if key == 'k':
-        quit()
-        #return False
+def on_release(key):
+    if hasattr(key, 'vk'):
+        print('You entered a number from the numpad: ', key.char, key.vk)
+        print(key.__dict__)
+    else:
+        print(key.__dict__)
         
 listener = KeyboardListener(on_press=on_press, on_release=on_release) 
 listener.start()
@@ -168,20 +170,19 @@ try:
     results = subprocess.check_output("wmctrl -lp | awk '/Freestyle GunZ/ { print $1 }'",shell=True,stderr=subprocess.STDOUT)
     result = results.decode("ascii")
     print(result)
-    os.system("wmctrl -iR "+result)
+    switch_to_window = subprocess.check_output("wmctrl -iR "+result,shell=True,stderr=subprocess.STDOUT)
     time.sleep(5)
-
     # move_to_cordinates()
     # reload_shot()
     # butterfly()
     # slash_shot()
     # gear_tap()
-    speedy()
-    # block()
+    # speedy()
+    #block()
     # eflip('w')
     #"xwd -id"+result+ "| convert xwd:- image.png"
     command = "xwd -root | convert xwd:- image.png"
-    os.system(command)
+    screenshot_window = subprocess.check_output(command,shell=True,stderr=subprocess.STDOUT)
 
 except subprocess.CalledProcessError as e:
     raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
