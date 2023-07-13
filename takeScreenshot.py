@@ -60,12 +60,12 @@ def butterfly():
     time.sleep(0.01)
 
 #Jump, Dash, Slash, Swap weapon, Shoot, then back to sword(optional)
-def slash_shot():
+def slash_shot(dir):
     keyboard.type('1')
 
     jump()
     time.sleep(0.05)
-    dash('w')
+    dash(dir)
 
     mouse.press(Button.left)
     time.sleep(0.05)
@@ -77,7 +77,7 @@ def slash_shot():
     keyboard.type('1')
 
 # slash, switch, shoot+reload, sword
-def gear_tap():
+def gear_tap(dir):
     keyboard.type('1')
 
     jump()
@@ -92,7 +92,7 @@ def gear_tap():
     keyboard.type('1')
     time.sleep(0.1)
     
-    dash('w')
+    dash(dir)
 
 def speedy():
     for i in range(10000):
@@ -174,11 +174,11 @@ try:
     time.sleep(5)
     # move_to_cordinates()
     # reload_shot()
-    # butterfly()
-    # slash_shot()
+    # butterfly('w)
+    # slash_shot('w')
     # gear_tap()
     # speedy()
-    #block()
+    # block()
     # eflip('w')
     #"xwd -id"+result+ "| convert xwd:- image.png"
     command = "xwd -root | convert xwd:- image.png"
