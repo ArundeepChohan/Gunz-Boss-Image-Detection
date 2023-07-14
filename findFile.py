@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 from bs4 import BeautifulSoup as bs
-from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController,KeyCode
+from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController, KeyCode
 from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
 keyboard = KeyboardController()
 mouse = MouseController()

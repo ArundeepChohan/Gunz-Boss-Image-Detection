@@ -12,6 +12,7 @@ For Speech
 pip3 install SpeechRecognition
 sudo apt install portaudio19-dev python3-pyaudio
 pip3 install sounddevice
+pip3 install PyAudio
 
 For Image Detection
 
