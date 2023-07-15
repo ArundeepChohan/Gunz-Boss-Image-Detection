@@ -146,7 +146,7 @@ class FindFile():
         'COMMUNITYITEM2':-1,
         'RELOAD':'r',
         'JUMP': Key.space,
-        'SCORE':Key.tab,
+        'SCORE': Key.tab,
         'MENU':-1,
         'TAUNT':-1,
         'BOW':-1,
@@ -164,7 +164,7 @@ class FindFile():
         'PREVIOUSSONG':-1,
         'NEXTSONG':-1,
         'TEAMCHAT':-1,
-        'PINGSYSTEM':Key.alt,
+        'PINGSYSTEM': Key.alt,
         }
     
     def find(self,name, path):
@@ -184,7 +184,6 @@ class FindFile():
     def current_settings(self):
         self.switch_to_root()
         cwd = os.getcwd()
-    
         config_path = None
         moves_setting = self.default_moves_setting.copy()
         paths = Path(cwd).rglob('*Freestyle GunZ')
@@ -215,7 +214,3 @@ class FindFile():
                 pass
 
         return moves_setting
-    
-settings = FindFile()
-print(settings.current_settings())                  
-print(type(Button.left),type(Key.enter),type('w'),type(0x2A))
