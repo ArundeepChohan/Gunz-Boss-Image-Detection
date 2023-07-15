@@ -46,10 +46,10 @@ def reload_shot():
         time.sleep(0.10)
         mouse.release(Button.button9)
 
-def butterfly():
+def butterfly(dir):
     jump()
     time.sleep(0.05)
-    dash('w')
+    dash(dir)
     mouse.press(Button.left)
     time.sleep(0.01)
     mouse.release(Button.left)
@@ -174,7 +174,7 @@ try:
     time.sleep(5)
     # move_to_cordinates()
     # reload_shot()
-    # butterfly('w)
+    butterfly('w')
     # slash_shot('w')
     # gear_tap()
     # speedy()

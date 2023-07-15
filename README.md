@@ -19,6 +19,16 @@ For Image Detection
 pip3 install ultralytics
 pip3 install torch torchvision torchaudio
 
+For Screenshot
+
+sudo apt-get install wmctrl
+
+Make sure wayland is off for X11:
+sudo nano /etc/gdm3/custom.conf
+WaylandEnable=false
+
+sudo apt install imagemagick-6.q16
+
 Linux based system:
 
 showkey -a
