@@ -2,8 +2,8 @@ import os
 import sys
 from pathlib import Path
 from bs4 import BeautifulSoup as bs
-from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController, KeyCode
-from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
+from pynput.keyboard import Key, Controller as KeyboardController, KeyCode
+from pynput.mouse import Button, Controller as MouseController
 keyboard = KeyboardController()
 mouse = MouseController()
 
@@ -179,7 +179,7 @@ class FindFile():
     """
         Use default settings in case config.xml is missing. 
         Furthermore find a way to transcript the values gotten from the file into mouse/keyboard values
-        <enum 'Key'> <class 'str'> <enum 'Button'>
+        <enum 'Key'> <class 'str'> <enum 'Button'><class 'int'>
     """
     def current_settings(self):
         self.switch_to_root()

@@ -2,3 +2,4 @@ venv/
 datasets/
 runs/
 image.png
+__pycache__

@@ -1,6 +1,7 @@
 import time
 import moves
 import takeScreenshot
+import speechDetection
 from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController, KeyCode
 from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
 
@@ -10,6 +11,8 @@ takeScreenshot = takeScreenshot.TakeScreenShot()
 
 keyboard = KeyboardController()
 mouse = MouseController()
+
+speech_detection = speechDetection.SpeechDetection()
 
 # Some helper functions to find button presses
 def on_press(key):
@@ -27,32 +30,40 @@ def on_release(key):
 listener = KeyboardListener(on_press=on_press, on_release=on_release) 
 listener.start()
 
-# def on_click(x, y, button, pressed):
-#     if pressed:
-#         print ('Mouse clicked {2}'.format(x, y, button))
+def on_click(x, y, button, pressed):
+    if pressed:
+        print ('Mouse clicked {2}'.format(x, y, button))
 
-
-# with MouseListener(on_click=on_click) as listener:
-#     listener.join()
-
+with MouseListener(on_click=on_click) as listener:
+    listener.join()
 
 def run():
+    global takeScreenshot,moves,speech_detection
     try:
         takeScreenshot.list_processes()
         try:
-            if takeScreenshot.active_window()!="Freestyle GunZ":
-                takeScreenshot.switch_window()
-                time.sleep(5)
-                print(takeScreenshot.active_window())
-            moves.butterfly('FORWARD') 
-            # eflip('w')
-            # reload_shot()
-            # butterfly('w')
-            # slash_shot('w') 
-            # gear_tap()
-            # speedy()
-            # block()
-            # takeScreenshot.screen_shot()
+            while True:
+                
+                # moves.butterfly('FORWARD') 
+                # moves.eflip('FORWARD')
+                # moves.reload_shot()
+                # moves.butterfly('FORWARD')
+                # moves.slash_shot('FORWARD') 
+                # moves.gear_tap()
+                # moves.speedy()
+                # moves.block()
+                # takeScreenshot.screen_shot()
+            
+                guess = speech_detection.recognize_speech_from_mic()
+                print(guess)
+                if guess['error'] !='Unable to recognize speech':
+                    if takeScreenshot.active_window()!="Freestyle GunZ":
+                            takeScreenshot.switch_window()
+                            time.sleep(3)
+                            print(takeScreenshot.active_window())
+                    if "FORWARD" in guess['transcription'].upper():
+                        moves.butterfly('FORWARD') 
+
         except RuntimeError as e:
             print('Changed Active Window',e)
             # break
