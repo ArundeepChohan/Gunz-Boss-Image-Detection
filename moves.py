@@ -1,7 +1,7 @@
 from enum import Enum
 import time
-from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController, KeyCode
-from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
+from pynput.keyboard import Key, Controller as KeyboardController, KeyCode
+from pynput.mouse import Button, Controller as MouseController
 keyboard = KeyboardController()
 mouse = MouseController()
 
@@ -21,34 +21,53 @@ class Moves():
     <class 'str'> 
     <class 'int'>
     """
-    def corresponding_event(self,key,delay=[0,0]):
+    def corresponding_event(self,key,delay=[0,0],release=True):
         print(type(key))
         if isinstance(key,Enum):
             if isinstance(key, Key):
                 print('Key', key.value)
                 keyboard.press(key)
-                time.sleep(delay[0])
-                keyboard.release(key)
-                time.sleep(delay[1])
+                if release:
+                    time.sleep(delay[0])
+                    keyboard.release(key)
+                    time.sleep(delay[1])
             elif isinstance(key, Button):
                 print('Button', key.value)
                 mouse.press(key)
-                time.sleep(delay[0])
-                mouse.release(key)
-                time.sleep(delay[1])
+                if release:
+                    time.sleep(delay[0])
+                    mouse.release(key)
+                    time.sleep(delay[1])
         else:
             print('Key', str(key))
             keyboard.press(key)
-            time.sleep(delay[0])
-            keyboard.release(key)
-            time.sleep(delay[1])
-
-    def dash(self,dir):
-        self.corresponding_event(self.settings[dir],[0.05,0.05])
-        self.corresponding_event(self.settings[dir],[0.05,0.05])
+            if release:
+                time.sleep(delay[0])
+                keyboard.release(key)
+                time.sleep(delay[1])
 
     def jump(self):
         self.corresponding_event(self.settings['JUMP'])
+
+    def dash(self,dir="FORWARD"):
+        self.corresponding_event(self.settings[dir],[0.05,0.05])
+        self.corresponding_event(self.settings[dir],[0.05,0.05])
+
+    def eflip(self,dir="FORWARD"):
+        button_combinations = [self.settings[dir],self.settings['USEWEAPON2']]
+        print(button_combinations)
+        # keyboard.press(dir)
+        # time.sleep(0.05)
+        # keyboard.release(dir)
+        # time.sleep(0.05)
+
+        # keyboard.press(dir)
+        # time.sleep(0.01)
+        # keyboard.press('r')
+        # time.sleep(0.05)
+        # keyboard.release(dir)
+        # time.sleep(0.01)
+        # keyboard.release('r')
 
     def reload_shot(self):
         button_combinations = [self.settings['PRIMARYWEAPON'],self.settings['SECONDARYWEAPON'],self.settings['USEWEAPON'],self.settings['RELOAD']]
@@ -83,7 +102,7 @@ class Moves():
             # time.sleep(0.20)
             # mouse.release(self.settings['RELOAD'])
 
-    def butterfly(self,dir):
+    def butterfly(self,dir="FORWARD"):
         button_combinations = [self.settings['JUMP'],self.settings[dir],self.settings['USEWEAPON'],self.settings['DEFENCE']]
         print(button_combinations)
         self.corresponding_event(self.settings['JUMP'],[0.01,0.05])
@@ -101,69 +120,102 @@ class Moves():
         # time.sleep(0.01)
         # keyboard.release(self.settings['DEFENCE'])
 
-    #Jump, Dash, Slash, Swap weapon, Shoot, then back to sword(optional)
-    def slash_shot(self,dir):
-        keyboard.type('1')
-        self.jump()
-        time.sleep(0.05)
+    #Jump, Dash, Slash, Swap weapon, Shoot+Reload, then back to sword(optional)
+    def slash_shot(self,dir="FORWARD",switch="PRIMARYWEAPON"):
+        button_combinations = [self.settings['JUMP'],self.settings[dir],self.settings['MELEEWEAPON'],self.settings['USEWEAPON'],self.settings[switch],self.settings['RELOAD']]
+        print(button_combinations)
+        self.corresponding_event(self.settings['MELEEWEAPON'],[0.01,0.05])
+        self.corresponding_event(self.settings['JUMP'],[0.01,0.05])
         self.dash(dir)
-        mouse.press(Button.left)
-        time.sleep(0.05)
-        keyboard.type('e')
-        time.sleep(0.05)
-        mouse.press(Button.left)
-        mouse.release(Button.left)
-        keyboard.type('1')
+        self.corresponding_event(self.settings['USEWEAPON'],[0.05,0.01])
+        self.corresponding_event(self.settings[switch],[0.05,0.05])
+        self.corresponding_event(self.settings['USEWEAPON'],[0.01,0.01])
+        self.corresponding_event(self.settings['RELOAD'],[0.01,0.01])
+        self.corresponding_event(self.settings['MELEEWEAPON'],[0.01,0.05])
 
-    # slash, switch, shoot+reload, sword
-    def gear_tap(self,dir):
-        keyboard.type('1')
-        self.jump()
-        time.sleep(0.05)
-        mouse.press(Button.left)
+        # keyboard.type('1')
+        # self.jump()
         # time.sleep(0.05)
-        keyboard.type('e')
-        time.sleep(0.30)
-        mouse.release(Button.left)
-        time.sleep(0.05)
-        keyboard.type('1')
-        time.sleep(0.1)
-        self.dash(dir)
+        # self.dash(dir)
+        # mouse.press(Button.left)
+        # time.sleep(0.05)
+        # keyboard.type('e')
+        # time.sleep(0.05)
+        # mouse.press(Button.left)
+        # mouse.release(Button.left)
+        # keyboard.type('1')
 
+    # Slash, Switch, Shoot+Reload, Sword
+    def gear_tap(self,dir="FORWARD",switch="PRIMARYWEAPON"):
+        button_combinations = [self.settings['JUMP'],self.settings[dir],self.settings['MELEEWEAPON'],self.settings['USEWEAPON'],self.settings[switch],self.settings['RELOAD']]
+        print(button_combinations)
+        # keyboard.type('1')
+        # self.jump()
+        # time.sleep(0.05)
+        # mouse.press(Button.left)
+        # # time.sleep(0.05)
+        # keyboard.type('e')
+        # time.sleep(0.30)
+        # mouse.release(Button.left)
+        # time.sleep(0.05)
+        # keyboard.type('1')
+        # time.sleep(0.1)
+        # self.dash(dir)
+
+    """
+    Walking, Speedying, Blocking all can repeated until the user says stop.
+    For walking you don't let go of the key. Send a release variable to not click 
+    the key inside corresponding event. Check a [] for just speedy/blocking and call them again. 
+    (todo)
+    """
     def speedy(self):
+        button_combinations = [self.settings['USEWEAPON']]
+        print(button_combinations)
         for i in range(10000):
-            mouse.press(Button.left)
-            time.sleep(0.001)
-            mouse.release(Button.left)
-            time.sleep(0.001)
+            self.corresponding_event(self.settings['USEWEAPON'],[0.001,0.001])
+            # mouse.press(Button.left)
+            # time.sleep(0.001)
+            # mouse.release(Button.left)
+            # time.sleep(0.001)
 
     def block(self):
+        button_combinations = [self.settings['DEFENCE']]
+        print(button_combinations)
         for i in range(10000):
-            mouse.press(Button.right)
-            time.sleep(0.001)
-            mouse.release(Button.right)
-            time.sleep(0.001)
+            self.corresponding_event(self.settings['DEFENCE'],[0.001,0.001])
+            # mouse.press(Button.right)
+            # time.sleep(0.001)
+            # mouse.release(Button.right)
+            # time.sleep(0.001)
+    
+    """
+    Will use the window geometry from active window to find position? 
+    1920x1080
 
-    # I think it's 1 second jump length
-    def jump_time(self):
-        for i in range(10):
-            keyboard.press(Key.space)
-            keyboard.release(Key.space)
-            time.sleep(1)
+    (todo)
+    """
+    def rotate(self,values):
+        print(values)
+        x=1920/2
+        y=1080/2
+        print('Now we have moved it to {0}'.format(mouse.position))
 
-    # dash with alt fire (todo)
-    def eflip(self,dir):
-        keyboard.press(dir)
-        time.sleep(0.05)
-        keyboard.release(dir)
-        time.sleep(0.05)
-        keyboard.press(dir)
-        time.sleep(0.01)
-        keyboard.press('r')
-        time.sleep(0.05)
-        keyboard.release(dir)
-        time.sleep(0.01)
-        keyboard.release('r')
-        # mouse.click(Button.button10)
-        # mouse.press(Button.button10)
-        # mouse.release(Button.button10)
+        # mouse.move(x,y)
+        mouse.move(x+90,y)
+        time.sleep(2)
+        print('Now we have moved it to {0}'.format(mouse.position))
+
+        # mouse.move(x,y)
+        # mouse.move(x-90,y)
+        # time.sleep(2)
+        # print('Now we have moved it to {0}'.format(mouse.position))
+
+        # mouse.move(x,y)
+        # mouse.move(x,y+90)
+        # time.sleep(2)
+        # print('Now we have moved it to {0}'.format(mouse.position))
+
+        # mouse.move(x,y)
+        # mouse.move(x,y-90)
+        # time.sleep(2)
+        # print('Now we have moved it to {0}'.format(mouse.position))

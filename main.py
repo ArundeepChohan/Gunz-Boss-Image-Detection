@@ -7,7 +7,7 @@ from pynput.mouse import Button,Listener as MouseListener, Controller as MouseCo
 
 moves = moves.Moves()
 print(moves.settings)
-takeScreenshot = takeScreenshot.TakeScreenShot()
+take_screenshot = takeScreenshot.TakeScreenShot()
 
 keyboard = KeyboardController()
 mouse = MouseController()
@@ -34,35 +34,43 @@ def on_click(x, y, button, pressed):
     if pressed:
         print ('Mouse clicked {2}'.format(x, y, button))
 
-with MouseListener(on_click=on_click) as listener:
-    listener.join()
+listener2 = MouseListener(on_click=on_click)
+listener2.start()
 
 def run():
-    global takeScreenshot,moves,speech_detection
+    global take_screenshot,moves,speech_detection
     try:
-        takeScreenshot.list_processes()
+        take_screenshot.list_processes()
         try:
             while True:
-                
-                # moves.butterfly('FORWARD') 
-                # moves.eflip('FORWARD')
-                # moves.reload_shot()
-                # moves.butterfly('FORWARD')
-                # moves.slash_shot('FORWARD') 
-                # moves.gear_tap()
-                # moves.speedy()
-                # moves.block()
-                # takeScreenshot.screen_shot()
+            
+                # take_screenshot.screen_shot()
             
                 guess = speech_detection.recognize_speech_from_mic()
                 print(guess)
                 if guess['error'] !='Unable to recognize speech':
-                    if takeScreenshot.active_window()!="Freestyle GunZ":
-                            takeScreenshot.switch_window()
+                    if take_screenshot.active_window()!="Freestyle GunZ":
+                            take_screenshot.switch_window()
                             time.sleep(3)
-                            print(takeScreenshot.active_window())
-                    if "FORWARD" in guess['transcription'].upper():
+                            print(take_screenshot.active_window())
+
+                    """
+                    (\w+)(?:/d)? Matches any group of words with optional number group
+                    Make it one or more word
+                    """
+                    if "RS" in guess['transcription'].upper():
+                        moves.reload_shot()
+                    if "SHOT" in guess['transcription'].upper():
+                        moves.slash_shot()
+                    if "BLOCK" in guess['transcription'].upper():
+                        moves.block()
+                    if "BF" in guess['transcription'].upper():
                         moves.butterfly('FORWARD') 
+                    if "DASH" in guess['transcription'].upper():
+                        moves.dash('FORWARD') 
+                    if "ROTATE" in guess['transcription'].upper():
+                        values = take_screenshot.window_geometry()
+                        moves.rotate(values)
 
         except RuntimeError as e:
             print('Changed Active Window',e)

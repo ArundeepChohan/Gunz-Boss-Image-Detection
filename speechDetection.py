@@ -6,9 +6,11 @@ class SpeechDetection:
     def __init__(self):
         #create recognizer and mic instances
         self.recognizer = sr.Recognizer()
+        # self.recognizer.pause_threshold = 0.5
+        # self.recognizer.energy_threshold = 4000
         self.microphone = sr.Microphone()
         with self.microphone as source:
-            self.recognizer.adjust_for_ambient_noise(source,duration=0.5)
+            self.recognizer.adjust_for_ambient_noise(source,duration=1)
     def recognize_speech_from_mic(self):
         """Transcribe speech from recorded from `microphone`.
 
@@ -31,7 +33,7 @@ class SpeechDetection:
         # adjust the recognizer sensitivity to ambient noise and record audio
         # from the microphone
         with self.microphone as source:
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source,phrase_time_limit=1)
 
         # set up the response object
         response = {
@@ -44,7 +46,7 @@ class SpeechDetection:
         # if a RequestError or UnknownValueError exception is caught,
         #     update the response object accordingly
         try:
-            response["transcription"] = self.recognizer.recognize_google(audio)
+            response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US')
         except sr.RequestError:
             # API was unreachable or unresponsive
             response["success"] = False

@@ -37,3 +37,11 @@ class TakeScreenShot():
             subprocess.check_output(command,encoding="UTF-8",shell=True,stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+        
+    def window_geometry(self):
+        try:
+            active_window = subprocess.check_output("xdotool getwindowfocus getwindowgeometry",encoding="UTF-8",shell=True,stderr=subprocess.STDOUT)
+            return active_window.strip()
+        except subprocess.CalledProcessError as e:
+            print("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+            raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
