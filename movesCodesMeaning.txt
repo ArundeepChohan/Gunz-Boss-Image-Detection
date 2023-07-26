@@ -153,6 +153,8 @@
 
 
 
+156 ENTER       (KEYPAD) ?
+157 RIGHT CTRL           ?
 
 
 
@@ -176,8 +178,10 @@
 
 
 
+181 /           (KEYPAD) ?
 
 
+184 RIGHT ALT ?
 
 
 
@@ -190,6 +194,7 @@
 
 
 
+197 PAUSE ?
 
 
 
@@ -213,12 +218,7 @@
 
 
 
-
-
-
-
-
-
+221 APPLICATION ?
 
 
 

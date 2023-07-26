@@ -39,7 +39,7 @@ class Moves():
                     mouse.release(key)
                     time.sleep(delay[1])
         else:
-            print('Key', str(key))
+            print('Key', key)
             keyboard.press(key)
             if release:
                 time.sleep(delay[0])
@@ -79,6 +79,7 @@ class Moves():
             self.corresponding_event(self.settings['SECONDARYWEAPON'],[0.15,0.075])
             self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
             self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
+            
             # keyboard.type('2')
             # time.sleep(0.10)
         
