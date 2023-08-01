@@ -10,6 +10,10 @@ class TakeScreenShot():
             result = results.strip()
             print(result)
             self.window = result
+            if result =='':
+                self.window = None
+                raise RuntimeError("Freestyle Gunz Not Opened")
+
         except subprocess.CalledProcessError as e:
             self.window = None
             raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
