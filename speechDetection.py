@@ -33,7 +33,7 @@ class SpeechDetection:
         # adjust the recognizer sensitivity to ambient noise and record audio
         # from the microphone
         with self.microphone as source:
-            audio = self.recognizer.listen(source,phrase_time_limit=2)
+            audio = self.recognizer.listen(source,phrase_time_limit=3)
 
         # set up the response object
         response = {

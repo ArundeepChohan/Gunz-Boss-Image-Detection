@@ -4,6 +4,7 @@ import takeScreenshot
 import speechDetection
 from pynput.keyboard import Key,Listener as KeyboardListener, Controller as KeyboardController
 from pynput.mouse import Button,Listener as MouseListener, Controller as MouseController
+import re
 
 import asyncio
 
@@ -19,7 +20,7 @@ class GameManager():
         self.listener2.start()
         self.listener = KeyboardListener(on_press=self.on_press, on_release=self.on_release) 
         self.listener.start()
-        self.commands={'RS':self.moves.reload_shot,'SHOT':self.moves.slash_shot,}
+        self.directions=['FORWARD','BACKWARD','LEFT','RIGHT']
 
     # Some helper functions to find button presses
     def on_press(self,key):
@@ -48,6 +49,15 @@ class GameManager():
             time.sleep(3)
             print(self.take_screenshot.active_window())
 
+    def commands(self,guess):
+        #\b(dash|bf|shot)+\b(\s*forward|back|left|right)?(\s*\d)?
+        #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
+        #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACKWARD|LEFT|RIGHT)?)?(\s*(\d)?)?
+        pattern = re.compile(r"\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACKWARD|LEFT|RIGHT)?(\s*\d)?")
+        res=[[match.group(1),match.group(2),match.group(3)] for match in pattern.finditer(guess)]
+        print(res)
+        return res
+
     def start(self):
         print('Starting')
         while True:
@@ -56,46 +66,57 @@ class GameManager():
                 try:
                     guess = self.speech_detection.recognize_speech_from_mic()
                     print(guess)
+                    
                     if guess['error'] !='Unable to recognize speech':
-                        self.swap_window()
+                        commands = self.commands(guess['transcription'].upper())
+                        if len(commands)!=0:
+                            print('Commands: ',commands)
+                            self.swap_window()
 
-                        """
-                            (\w+)(?:/d)? Matches any group of words with optional number group
-                            Make it one or more word
                             """
-                            # if "SPEED" in guess['transcription'].upper():
-                                # moves.speedy()
-                                # moves.register_callback(moves.corresponding_event(moves.settings['USEWEAPON'],[0.001,0.001]))
-                            # if "BLOCK" in guess['transcription'].upper():
-                                # moves.block()
-                                # moves.register_callback(moves.corresponding_event(moves.settings['DEFENCE'],[0.001,0.001]))
-                            # if "WALK" in guess['transcription'].upper():
-                                # print('walk')
-                                # moves.register_callback(moves.corresponding_event(moves.settings['FORWARD'],[0.001,0.001],False))
-                                
-                        """
-                            Make a way to stop continuous actions (todo) unrelease button.
-                        """
-                        # if "STOP" in guess['transcription'].upper():
-                        #     print('Delete callbacks')
-                        # if "RS" in guess['transcription'].upper():
-                        #     self.moves.reload_shot()
-                        # if "SHOT" in guess['transcription'].upper():
-                        #     self.moves.slash_shot()
-                        # if "BF" in guess['transcription'].upper():
-                        #     self.moves.butterfly('FORWARD') 
-                        # if "DASH" in guess['transcription'].upper():
-                        #     self.moves.dash('FORWARD') 
-                        # if "ROTATE" in guess['transcription'].upper():
-                        #     values = self.take_screenshot.window_geometry()
-                        #     self.moves.rotate(values)
-                        try:
-                            self.commands[guess['transcription'].upper()]()
-                        except Exception as e:
-                            print('Invalid command ',str(e))
+                                (\w+)(?:/d)? Matches any group of words with optional number group
+                                Make it one or more word
+                                command             direction                   digits
+                                """
+                                # if "SPEED" in guess['transcription'].upper():
+                                    # moves.speedy()
+                                    # moves.register_callback(moves.corresponding_event(moves.settings['USEWEAPON'],[0.001,0.001]))
+                                # if "BLOCK" in guess['transcription'].upper():
+                                    # moves.block()
+                                    # moves.register_callback(moves.corresponding_event(moves.settings['DEFENCE'],[0.001,0.001]))
+                                # if "WALK" in guess['transcription'].upper():
+                                    # print('walk')
+                                    # moves.register_callback(moves.corresponding_event(moves.settings['FORWARD'],[0.001,0.001],False))
+                                    
+                            """
+                                Make a way to stop continuous actions (todo) unrelease button.
+                            """
+                            
+                            try:
+                                for command in commands:
+                                    #self.commands[guess['transcription'].upper()]()
+                                    print(command[0])
+                                    if "STOP" == command[0]:
+                                        print('Delete callbacks')
+                                    elif "RS" == command[0]:
+                                        self.moves.reload_shot()
+                                    elif "SHOOT" == command[0]:
+                                        if command[1] in self.directions:
+                                            self.moves.slash_shot(dir=command[1])
+                                        else:
+                                            self.moves.slash_shot()
 
-                    if self.take_screenshot.active_window()=="Freestyle GunZ":
-                        self.take_screen()
+                                    elif "BF" == command[0]:
+                                        self.moves.butterfly() 
+                                    elif "DASH" == command[0]:
+                                        self.moves.dash() 
+                                    elif "ROTATE" == command[0]:
+                                        self.moves.rotate(self.take_screenshot.window_geometry())
+                            except Exception as e:
+                                print('Invalid command ',str(e))
+
+                        if self.take_screenshot.active_window()=="Freestyle GunZ":
+                            self.take_screen()
                 except RuntimeError as e:
                     print('Changed Active Window',e) 
             except RuntimeError as e: 
