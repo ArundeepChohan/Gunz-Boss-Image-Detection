@@ -49,12 +49,29 @@ class GameManager():
             time.sleep(3)
             print(self.take_screenshot.active_window())
 
+    """
+    Given some words breaks them into valid commands with valid optional parameters
+    Jump(any single use in self.settings in moves.py)                   -> Nothing
+    Dash, Bf, Shoot                                                     -> Direction
+    Rotate                                                              -> Direction x,y, or maybe include Eyetracker?
+    Rs                                                                  -> Number of Times
+    Slashing, Blocking                                                  -> Nothing
+    Walking                                                             -> Direction 
+    """
+
+    """
+    (?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)\s*?\s*(\d)?)|\b(PING)|\b(MACRO)
+
+    Adding ping system, macro(1-8), single use moves, and comboes.
+    
+    """
     def commands(self,guess):
         #\b(dash|bf|shot)+\b(\s*forward|back|left|right)?(\s*\d)?
         #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
         #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACKWARD|LEFT|RIGHT)?)?(\s*(\d)?)?
-        pattern = re.compile(r"\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACKWARD|LEFT|RIGHT)?(\s*\d)?")
-        res=[[match.group(1),match.group(2),match.group(3)] for match in pattern.finditer(guess)]
+        #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACKWARD|LEFT|RIGHT)?(\s*\d)?
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)\s*?\s*(\d)?)|\b(PING)|\b(MACRO)")
+        res=[[match.group()] for match in pattern.finditer(guess)]
         print(res)
         return res
 
@@ -73,11 +90,6 @@ class GameManager():
                             print('Commands: ',commands)
                             self.swap_window()
 
-                            """
-                                (\w+)(?:/d)? Matches any group of words with optional number group
-                                Make it one or more word
-                                command             direction                   digits
-                                """
                                 # if "SPEED" in guess['transcription'].upper():
                                     # moves.speedy()
                                     # moves.register_callback(moves.corresponding_event(moves.settings['USEWEAPON'],[0.001,0.001]))
@@ -87,14 +99,9 @@ class GameManager():
                                 # if "WALK" in guess['transcription'].upper():
                                     # print('walk')
                                     # moves.register_callback(moves.corresponding_event(moves.settings['FORWARD'],[0.001,0.001],False))
-                                    
-                            """
-                                Make a way to stop continuous actions (todo) unrelease button.
-                            """
                             
                             try:
                                 for command in commands:
-                                    #self.commands[guess['transcription'].upper()]()
                                     print(command[0])
                                     if "STOP" == command[0]:
                                         print('Delete callbacks')
@@ -105,11 +112,16 @@ class GameManager():
                                             self.moves.slash_shot(dir=command[1])
                                         else:
                                             self.moves.slash_shot()
-
                                     elif "BF" == command[0]:
-                                        self.moves.butterfly() 
+                                        if command[1] in self.directions:
+                                            self.moves.butterfly(dir=command[1])
+                                        else:
+                                            self.moves.butterfly() 
                                     elif "DASH" == command[0]:
-                                        self.moves.dash() 
+                                        if command[1] in self.directions:
+                                            self.moves.dash(dir=command[1])
+                                        else:
+                                            self.moves.dash() 
                                     elif "ROTATE" == command[0]:
                                         self.moves.rotate(self.take_screenshot.window_geometry())
                             except Exception as e:
@@ -121,7 +133,6 @@ class GameManager():
                     print('Changed Active Window',e) 
             except RuntimeError as e: 
                 print('Freestyle Gunz not Open',e)            
-
 
 def main():
     game_manager = GameManager()

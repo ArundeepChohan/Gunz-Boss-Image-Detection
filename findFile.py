@@ -131,8 +131,8 @@ class FindFile():
         self.default_moves_setting = {
         'USEWEAPON':Button.left,
         'USEWEAPON2':Button.right,
-        'PREVOUSWEAPON':-1,
-        'NEXTWEAPON': -1,
+        'PREVOUSWEAPON':'q',
+        'NEXTWEAPON': 'e',
         'FORWARD':'w',
         'BACK':'s',
         'LEFT':'a',
