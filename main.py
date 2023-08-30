@@ -60,7 +60,7 @@ class GameManager():
     """
 
     """
-    (?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)\s*?\s*(\d)?)|\b(PING)|\b(MACRO)
+    (?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)
 
     Adding ping system, macro(1-8), single use moves, and comboes.
     
@@ -70,7 +70,7 @@ class GameManager():
         #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
         #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACKWARD|LEFT|RIGHT)?)?(\s*(\d)?)?
         #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACKWARD|LEFT|RIGHT)?(\s*\d)?
-        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)\s*?\s*(\d)?)|\b(PING)|\b(MACRO)")
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)")
         res=[[match.group()] for match in pattern.finditer(guess)]
         print(res)
         return res
