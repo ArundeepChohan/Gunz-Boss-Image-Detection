@@ -20,7 +20,7 @@ class GameManager():
         self.listener2.start()
         self.listener = KeyboardListener(on_press=self.on_press, on_release=self.on_release) 
         self.listener.start()
-        self.directions=['FORWARD','BACKWARD','LEFT','RIGHT']
+        self.directions=['FORWARD','BACK','LEFT','RIGHT']
 
     # Some helper functions to find button presses
     def on_press(self,key):
@@ -51,26 +51,29 @@ class GameManager():
 
     """
     Given some words breaks them into valid commands with valid optional parameters
+
+    Ping                                                                -> Number (1-9)
+    Macro                                                               -> Number (1-8)
+
+    Single Use:
     Jump(any single use in self.settings in moves.py)                   -> Nothing
-    Dash, Bf, Shoot                                                     -> Direction
     Rotate                                                              -> Direction x,y, or maybe include Eyetracker?
+
+    Comboes:
+    Dash, Bf, Shoot                                                     -> Direction
     Rs                                                                  -> Number of Times
+
+    Callbacks:
     Slashing, Blocking                                                  -> Nothing
     Walking                                                             -> Direction 
-    """
-
-    """
-    (?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)
-
-    Adding ping system, macro(1-8), single use moves, and comboes.
     
     """
     def commands(self,guess):
         #\b(dash|bf|shot)+\b(\s*forward|back|left|right)?(\s*\d)?
         #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
-        #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACKWARD|LEFT|RIGHT)?)?(\s*(\d)?)?
-        #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACKWARD|LEFT|RIGHT)?(\s*\d)?
-        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACKWARD|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)")
+        #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACK|LEFT|RIGHT)?)?(\s*(\d)?)?
+        #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACK|LEFT|RIGHT)?(\s*\d)?
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACK|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)")
         res=[[match.group()] for match in pattern.finditer(guess)]
         print(res)
         return res

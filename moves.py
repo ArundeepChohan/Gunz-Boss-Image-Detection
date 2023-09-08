@@ -11,6 +11,7 @@ findFile = findFile.FindFile()
 class Moves():
     def __init__(self):
         self.settings = findFile.current_settings()
+        print(self.settings)
 
     def update(self):
         self.settings = findFile.current_settings()

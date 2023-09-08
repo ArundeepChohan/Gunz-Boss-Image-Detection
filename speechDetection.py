@@ -57,8 +57,8 @@ class SpeechDetection:
 
         return response
 
-# speech_detection=SpeechDetection()
-# while True:
-#     guess = speech_detection.recognize_speech_from_mic()
-#     print(guess)
+speech_detection=SpeechDetection()
+while True:
+    guess = speech_detection.recognize_speech_from_mic()
+    print(guess)
 
