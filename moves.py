@@ -131,7 +131,7 @@ class Moves():
         self.dash(dir)
         self.corresponding_event(self.settings['USEWEAPON'],[0.05,0.01])
         self.corresponding_event(self.settings[switch],[0.05,0.05])
-        self.corresponding_event(self.settings['USEWEAPON'],[0.01,0.01])
+        self.corresponding_event(self.settings['USEWEAPON'],[0.01,0.05])
         self.corresponding_event(self.settings['RELOAD'],[0.01,0.01])
         self.corresponding_event(self.settings['MELEEWEAPON'],[0.01,0.05])
 

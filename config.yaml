@@ -1,4 +1,4 @@
-path: /home/arundeep/Desktop/GunzBossImageDetection/datasets
+path: /home/arundeep/Desktop/Gunz-Boss-Image-Detection/datasets
 train: ../train/images
 val: ../val/images
 

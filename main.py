@@ -67,14 +67,17 @@ class GameManager():
     Slashing, Blocking                                                  -> Nothing
     Walking                                                             -> Direction 
     
+    \b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?|\b(RS)\b\s*(\d)?|\b(PING)\b\s*(\d{1})?(?!\d)|\b(MACRO)\b\s*\b([1-8])?\b
+    (?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)
     """
     def commands(self,guess):
         #\b(dash|bf|shot)+\b(\s*forward|back|left|right)?(\s*\d)?
         #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
         #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACK|LEFT|RIGHT)?)?(\s*(\d)?)?
         #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACK|LEFT|RIGHT)?(\s*\d)?
-        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACK|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)")
-        res=[[match.group()] for match in pattern.finditer(guess)]
+        #(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACK|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)")
+        res=[[item for item in match.groups()]for match in pattern.finditer(guess)]
         print(res)
         return res
 
@@ -87,7 +90,7 @@ class GameManager():
                     guess = self.speech_detection.recognize_speech_from_mic()
                     print(guess)
                     
-                    if guess['error'] !='Unable to recognize speech':
+                    if guess['error'] !='Unable to recognize speech' and guess['error'] !='API unavailable':
                         commands = self.commands(guess['transcription'].upper())
                         if len(commands)!=0:
                             print('Commands: ',commands)
@@ -108,23 +111,24 @@ class GameManager():
                                     print(command[0])
                                     if "STOP" == command[0]:
                                         print('Delete callbacks')
-                                    elif "RS" == command[0]:
+                                    elif "RS" == command[2]:
                                         self.moves.reload_shot()
-                                    elif "SHOOT" == command[0]:
-                                        if command[1] in self.directions:
-                                            self.moves.slash_shot(dir=command[1])
-                                        else:
-                                            self.moves.slash_shot()
-                                    elif "BF" == command[0]:
-                                        if command[1] in self.directions:
-                                            self.moves.butterfly(dir=command[1])
-                                        else:
-                                            self.moves.butterfly() 
+                                    
                                     elif "DASH" == command[0]:
                                         if command[1] in self.directions:
                                             self.moves.dash(dir=command[1])
                                         else:
                                             self.moves.dash() 
+                                    elif "BF" == command[0]:
+                                        if command[1] in self.directions:
+                                            self.moves.butterfly(dir=command[1])
+                                        else:
+                                            self.moves.butterfly() 
+                                    elif "SHOOT" == command[0]:
+                                        if command[1] in self.directions:
+                                            self.moves.slash_shot(dir=command[1])
+                                        else:
+                                            self.moves.slash_shot()
                                     elif "ROTATE" == command[0]:
                                         self.moves.rotate(self.take_screenshot.window_geometry())
                             except Exception as e:
