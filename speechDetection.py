@@ -1,7 +1,9 @@
 import speech_recognition as sr
 import sounddevice
-print(sr.__version__)
-print( sr.Microphone.list_microphone_names())
+import re
+from word2number import w2n
+# print(sr.__version__)
+# print( sr.Microphone.list_microphone_names())
 class SpeechDetection:
     def __init__(self):
         self.recognizer = sr.Recognizer()
@@ -36,7 +38,20 @@ class SpeechDetection:
         }
 
         try:
-            response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US')
+            response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US').upper()
+            parts = re.findall(r'\D+|\d+', response["transcription"])
+            words = ' '.join(parts)
+            print('Words: ',words)
+            o = []
+            for word in words.split(' '):
+                try:
+                    o += [str(w2n.word_to_num(word))]
+                except ValueError:
+                    o += [word]
+            print('Before join',o)
+            response["transcription"] = ' '.join(o)
+
+
         except sr.RequestError:
             response["success"] = False
             response["error"] = "API unavailable"

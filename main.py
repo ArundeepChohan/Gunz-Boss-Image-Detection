@@ -39,7 +39,7 @@ class GameManager():
             print ('Mouse clicked {2}'.format(x, y, button))
 
     def take_screen(self):
-        print("Screening")
+        print('Screening')
         self.take_screenshot.screen_shot()
 
     def swap_window(self):
@@ -50,7 +50,7 @@ class GameManager():
             print(self.take_screenshot.active_window())
 
     """
-    Given some words breaks them into valid commands with valid optional parameters
+    Given some words breaks them into valid commands with val3id optional parameters
 
     Ping                                                                -> Number (1-9)
     Macro                                                               -> Number (1-8)
@@ -67,16 +67,11 @@ class GameManager():
     Slashing, Blocking                                                  -> Nothing
     Walking                                                             -> Direction 
     
-    \b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?|\b(RS)\b\s*(\d)?|\b(PING)\b\s*(\d{1})?(?!\d)|\b(MACRO)\b\s*\b([1-8])?\b
-    (?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)
+
+    (?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHO|RIGH|LEF)T|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))
     """
     def commands(self,guess):
-        #\b(dash|bf|shot)+\b(\s*forward|back|left|right)?(\s*\d)?
-        #\b(dash|bf|shot)+\b(\s*\b(forward|back|left|right)\b)?(\s*\d)?
-        #\b(DASH|BF|SHOOT)+\b(\s*(FORWARD|BACK|LEFT|RIGHT)?)?(\s*(\d)?)?
-        #\b(DASH|BF|SHOOT)+\b(\s*FORWARD|BACK|LEFT|RIGHT)?(\s*\d)?
-        #(?:\b(DASH|BF|SHOOT)+\s*(FORWARD|BACK|LEFT|RIGHT)?\s*(\d)?)|\b(PING)|\b(MACRO)
-        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)")
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHO|RIGH|LEF)T|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))")
         res=[[item for item in match.groups()]for match in pattern.finditer(guess)]
         print(res)
         return res
@@ -91,7 +86,8 @@ class GameManager():
                     print(guess)
                     
                     if guess['error'] !='Unable to recognize speech' and guess['error'] !='API unavailable':
-                        commands = self.commands(guess['transcription'].upper())
+                        
+                        commands = self.commands(guess['transcription'])
                         if len(commands)!=0:
                             print('Commands: ',commands)
                             self.swap_window()
@@ -108,13 +104,7 @@ class GameManager():
                             
                             try:
                                 for command in commands:
-                                    print(command[0])
-                                    if "STOP" == command[0]:
-                                        print('Delete callbacks')
-                                    elif "RS" == command[2]:
-                                        self.moves.reload_shot()
-                                    
-                                    elif "DASH" == command[0]:
+                                    if "DASH" == command[0]:
                                         if command[1] in self.directions:
                                             self.moves.dash(dir=command[1])
                                         else:
@@ -129,8 +119,21 @@ class GameManager():
                                             self.moves.slash_shot(dir=command[1])
                                         else:
                                             self.moves.slash_shot()
+                                    elif "RS" == command[2]:
+                                        if command[3]!=None:
+                                            self.moves.reload_shot(command[3])
+                                        else:
+                                            self.moves.reload_shot()
+                                    elif "PING" == command[4]:
+                                        print('PING')
+                                    elif "MACRO" == command[6]:
+                                        print('MACRO')
+                                    elif command[8] != None:
+                                        print('Single use: ',self.moves.settings[command[8].replace(" ", "")])
+                                        self.moves.corresponding_event(self.moves.settings[command[8].replace(" ", "")],[.01,.01])
                                     elif "ROTATE" == command[0]:
                                         self.moves.rotate(self.take_screenshot.window_geometry())
+
                             except Exception as e:
                                 print('Invalid command ',str(e))
 

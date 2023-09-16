@@ -70,10 +70,10 @@ class Moves():
         # time.sleep(0.01)
         # keyboard.release('r')
 
-    def reload_shot(self):
+    def reload_shot(self,n=1):
         button_combinations = [self.settings['PRIMARYWEAPON'],self.settings['SECONDARYWEAPON'],self.settings['USEWEAPON'],self.settings['RELOAD']]
         print(button_combinations)
-        for i in range(5):
+        for i in range(n):
             self.corresponding_event(self.settings['PRIMARYWEAPON'],[0.15,0.075])
             self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
             self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
