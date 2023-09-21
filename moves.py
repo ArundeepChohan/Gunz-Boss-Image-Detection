@@ -47,62 +47,9 @@ class Moves():
                 keyboard.release(key)
                 time.sleep(delay[1])
 
-    def jump(self):
-        self.corresponding_event(self.settings['JUMP'])
-
     def dash(self,dir="FORWARD"):
         self.corresponding_event(self.settings[dir],[0.05,0.05])
         self.corresponding_event(self.settings[dir],[0.05,0.05])
-
-    def eflip(self,dir="FORWARD"):
-        button_combinations = [self.settings[dir],self.settings['USEWEAPON2']]
-        print(button_combinations)
-        # keyboard.press(dir)
-        # time.sleep(0.05)
-        # keyboard.release(dir)
-        # time.sleep(0.05)
-
-        # keyboard.press(dir)
-        # time.sleep(0.01)
-        # keyboard.press('r')
-        # time.sleep(0.05)
-        # keyboard.release(dir)
-        # time.sleep(0.01)
-        # keyboard.release('r')
-
-    def reload_shot(self,n=1):
-        button_combinations = [self.settings['PRIMARYWEAPON'],self.settings['SECONDARYWEAPON'],self.settings['USEWEAPON'],self.settings['RELOAD']]
-        print(button_combinations)
-        for i in range(n):
-            self.corresponding_event(self.settings['PRIMARYWEAPON'],[0.15,0.075])
-            self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
-            self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
-            self.corresponding_event(self.settings['SECONDARYWEAPON'],[0.15,0.075])
-            self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
-            self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
-            
-            # keyboard.type('2')
-            # time.sleep(0.10)
-        
-            # mouse.press(self.settings['USEWEAPON'])
-            # time.sleep(0.20)
-            # mouse.release(self.settings['USEWEAPON'])
-            # time.sleep(0.10)
-            
-            # mouse.press(self.settings['RELOAD'])
-            # time.sleep(0.20)
-            # mouse.release(self.settings['RELOAD'])
-
-            # keyboard.type('3')
-            # time.sleep(0.10)
-            # mouse.press(self.settings['USEWEAPON'])
-            # time.sleep(0.20)
-            # mouse.release(self.settings['USEWEAPON'])
-            # time.sleep(0.10)
-
-            # mouse.press(self.settings['RELOAD'])
-            # time.sleep(0.20)
-            # mouse.release(self.settings['RELOAD'])
 
     def butterfly(self,dir="FORWARD"):
         button_combinations = [self.settings['JUMP'],self.settings[dir],self.settings['USEWEAPON'],self.settings['DEFENCE']]
@@ -164,46 +111,77 @@ class Moves():
         # time.sleep(0.1)
         # self.dash(dir)
 
-    """
-    Walking, Speedying, Blocking all can repeated until the user says stop.
-    For walking you don't let go of the key. Send a release variable to not click 
-    the key inside corresponding event. Check a [] for just speedy/blocking and call them again. 
-    (todo)
-    """
-    def speedy(self):
-        button_combinations = [self.settings['USEWEAPON']]
+    def eflip(self,dir="FORWARD"):
+        button_combinations = [self.settings[dir],self.settings['USEWEAPON2']]
         print(button_combinations)
-        for i in range(10000):
-            self.corresponding_event(self.settings['USEWEAPON'],[0.001,0.001])
-            # mouse.press(Button.left)
-            # time.sleep(0.001)
-            # mouse.release(Button.left)
-            # time.sleep(0.001)
+        # keyboard.press(dir)
+        # time.sleep(0.05)
+        # keyboard.release(dir)
+        # time.sleep(0.05)
 
-    def block(self):
-        button_combinations = [self.settings['DEFENCE']]
+        # keyboard.press(dir)
+        # time.sleep(0.01)
+        # keyboard.press('r')
+        # time.sleep(0.05)
+        # keyboard.release(dir)
+        # time.sleep(0.01)
+        # keyboard.release('r')
+
+    def reload_shot(self,n=1):
+        button_combinations = [self.settings['PRIMARYWEAPON'],self.settings['SECONDARYWEAPON'],self.settings['USEWEAPON'],self.settings['RELOAD']]
         print(button_combinations)
-        for i in range(10000):
-            self.corresponding_event(self.settings['DEFENCE'],[0.001,0.001])
-            # mouse.press(Button.right)
-            # time.sleep(0.001)
-            # mouse.release(Button.right)
-            # time.sleep(0.001)
-    
+        for i in range(n):
+            self.corresponding_event(self.settings['PRIMARYWEAPON'],[0.15,0.075])
+            self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
+            self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
+            self.corresponding_event(self.settings['SECONDARYWEAPON'],[0.15,0.075])
+            self.corresponding_event(self.settings['USEWEAPON'],[0.1,0.075])
+            self.corresponding_event(self.settings['RELOAD'],[0.1,0.1])
+            
+            # keyboard.type('2')
+            # time.sleep(0.10)
+        
+            # mouse.press(self.settings['USEWEAPON'])
+            # time.sleep(0.20)
+            # mouse.release(self.settings['USEWEAPON'])
+            # time.sleep(0.10)
+            
+            # mouse.press(self.settings['RELOAD'])
+            # time.sleep(0.20)
+            # mouse.release(self.settings['RELOAD'])
+
+            # keyboard.type('3')
+            # time.sleep(0.10)
+            # mouse.press(self.settings['USEWEAPON'])
+            # time.sleep(0.20)
+            # mouse.release(self.settings['USEWEAPON'])
+            # time.sleep(0.10)
+
+            # mouse.press(self.settings['RELOAD'])
+            # time.sleep(0.20)
+            # mouse.release(self.settings['RELOAD'])
+
+    def ping(self,n=1):
+        self.corresponding_event(self.settings['PINGSYSTEM'])
+
+    #https://stackoverflow.com/questions/3286089/how-to-dynamically-compose-and-access-class-attributes-in-python
+    def macro(self,n=1):
+        self.corresponding_event(getattr(Key, 'f'+n))
+
     """
     Will use the window geometry from active window to find position? 
     1920x1080
 
     (todo)
     """
-    def rotate(self,values):
-        print(values)
+    def rotate(self,values,UP=0,DOWN=0,LEFT=0,RIGHT=0):
+        print(values,UP,DOWN,LEFT,RIGHT)
         x=1920/2
         y=1080/2
         print('Now we have moved it to {0}'.format(mouse.position))
 
         # mouse.move(x,y)
-        mouse.move(x+90,y)
+        mouse.move(x+(-LEFT)+RIGHT,y+UP+(-DOWN))
         time.sleep(2)
         print('Now we have moved it to {0}'.format(mouse.position))
 
@@ -221,3 +199,31 @@ class Moves():
         # mouse.move(x,y-90)
         # time.sleep(2)
         # print('Now we have moved it to {0}'.format(mouse.position))
+
+# Todo Add Callbacks
+
+    # """
+    # Walking, Speedying, Blocking all can repeated until the user says stop.
+    # For walking you don't let go of the key. Send a release variable to not click 
+    # the key inside corresponding event. Check a [] for just speedy/blocking and call them again. 
+    # (todo)
+    # """
+    # def speedy(self):
+    #     button_combinations = [self.settings['USEWEAPON']]
+    #     print(button_combinations)
+    #     for i in range(10000):
+    #         self.corresponding_event(self.settings['USEWEAPON'],[0.001,0.001])
+    #         # mouse.press(Button.left)
+    #         # time.sleep(0.001)
+    #         # mouse.release(Button.left)
+    #         # time.sleep(0.001)
+
+    # def block(self):
+    #     button_combinations = [self.settings['DEFENCE']]
+    #     print(button_combinations)
+    #     for i in range(10000):
+    #         self.corresponding_event(self.settings['DEFENCE'],[0.001,0.001])
+    #         # mouse.press(Button.right)
+    #         # time.sleep(0.001)
+    #         # mouse.release(Button.right)
+    #         # time.sleep(0.001)

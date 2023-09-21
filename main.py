@@ -50,7 +50,11 @@ class GameManager():
             print(self.take_screenshot.active_window())
 
     """
-    Given some words breaks them into valid commands with val3id optional parameters
+    Given some words breaks them into valid commands with valid optional parameters
+
+    Comboes:
+    Dash, Bf, Shoot                                                     -> Direction
+    Rs                                                                  -> Number of Times
 
     Ping                                                                -> Number (1-9)
     Macro                                                               -> Number (1-8)
@@ -59,19 +63,14 @@ class GameManager():
     Jump(any single use in self.settings in moves.py)                   -> Nothing
     Rotate                                                              -> Direction x,y, or maybe include Eyetracker?
 
-    Comboes:
-    Dash, Bf, Shoot                                                     -> Direction
-    Rs                                                                  -> Number of Times
-
     Callbacks:
     Slashing, Blocking                                                  -> Nothing
     Walking                                                             -> Direction 
     
-
-    (?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHO|RIGH|LEF)T|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))
+    (?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHOT)|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|LEFT|RIGHT|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))|(?:\b(ROTATE)\b(?!$)(?:\s*(?:(?:UP)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:DOWN)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:LEFT)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:RIGHT)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*)+)
     """
     def commands(self,guess):
-        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHO|RIGH|LEF)T|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))")
+        pattern = re.compile(r"(?:\b(DASH|BF|SHOOT)\b\s*(FORWARD|BACK|LEFT|RIGHT)?)|(?:\b(RS)+\s*(\d)?)|(?:\b(PING)+\s*(\d{1})?(?!\d))|(?:\b(MACRO)+\s*\b([1-8])?\b)|((?:M(?:OUSE\sSENSITIVITY\s(?:DE|IN)C|ENU)|(?:COMMUNITY\s)?ITEM\s[12]|SECONDARY\sWEAPON|PR(?:EVIOUS\s(?:WEAPON|SONG)|IMARY\sWEAPON)|MOVING\sPICTURE|USE\sWEAPON\s[2]|MELEE\sWEAPON|(?:SCREEN\sSHOT)|T(?:OGGLE\sCHA|(?:EAM\sCHA|AUN))T|NEXT\sWEAPON|USE\sWEAPON|NEXT\sSONG|(?:D(?:EFE|A)NC|WAV)E|FORWARD|LEFT|RIGHT|RELOAD|RECORD|LAUGH|SCORE|B(?:ACK|OW)|JUMP|CRY))|(?:\b(ROTATE)\b(?!$)(?:\s*(?:(?:UP)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:DOWN)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:LEFT)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*(?:(?:RIGHT)\s*([1-9]|[1-9][0-9]|[12][0-9]{2}|3[0-5][0-9]|360)?)?\s*)+)")
         res=[[item for item in match.groups()]for match in pattern.finditer(guess)]
         print(res)
         return res
@@ -104,6 +103,7 @@ class GameManager():
                             
                             try:
                                 for command in commands:
+                                    print("command", command)
                                     if "DASH" == command[0]:
                                         if command[1] in self.directions:
                                             self.moves.dash(dir=command[1])
@@ -124,15 +124,21 @@ class GameManager():
                                             self.moves.reload_shot(command[3])
                                         else:
                                             self.moves.reload_shot()
-                                    elif "PING" == command[4]:
-                                        print('PING')
-                                    elif "MACRO" == command[6]:
-                                        print('MACRO')
-                                    elif command[8] != None:
-                                        print('Single use: ',self.moves.settings[command[8].replace(" ", "")])
-                                        self.moves.corresponding_event(self.moves.settings[command[8].replace(" ", "")],[.01,.01])
-                                    elif "ROTATE" == command[0]:
-                                        self.moves.rotate(self.take_screenshot.window_geometry())
+                                    # elif "PING" == command[4]:
+                                    #     self.moves.ping(command[5])
+                                    # elif "MACRO" == command[6]:
+                                    #     self.moves.macro(command[7])
+                                    # elif command[8] != None:
+                                    #     print('Single use: ',self.moves.settings[command[8].replace(" ", "")])
+                                    #     self.moves.corresponding_event(self.moves.settings[command[8].replace(" ", "")],[.01,.01])
+                                    elif "ROTATE" == command[9]:
+                                        print(command[10],command[11],command[12],command[13])
+                                        print(0 if command[10] is None else float(command[10]))
+                                        self.moves.rotate(self.take_screenshot.window_geometry()
+                                                          ,0 if command[10] is None else float(command[10])
+                                                          ,0 if command[11] is None else float(command[11])
+                                                          ,0 if command[12] is None else float(command[12])
+                                                          ,0 if command[13] is None else float(command[13]))
 
                             except Exception as e:
                                 print('Invalid command ',str(e))

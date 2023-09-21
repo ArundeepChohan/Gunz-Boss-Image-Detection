@@ -40,6 +40,7 @@ class SpeechDetection:
         try:
             response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US').upper()
             parts = re.findall(r'\D+|\d+', response["transcription"])
+            print("Parts",parts)
             words = ' '.join(parts)
             print('Words: ',words)
             o = []
@@ -50,7 +51,6 @@ class SpeechDetection:
                     o += [word]
             print('Before join',o)
             response["transcription"] = ' '.join(o)
-
 
         except sr.RequestError:
             response["success"] = False
