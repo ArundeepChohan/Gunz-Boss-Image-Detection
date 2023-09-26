@@ -8,6 +8,8 @@ mouse = MouseController()
 import findFile
 findFile = findFile.FindFile()
 
+import math
+
 class Moves():
     def __init__(self):
         self.settings = findFile.current_settings()
@@ -176,29 +178,14 @@ class Moves():
     """
     def rotate(self,values,UP=0,DOWN=0,LEFT=0,RIGHT=0):
         print(values,UP,DOWN,LEFT,RIGHT)
-        x=1920/2
-        y=1080/2
+        # Each degree has a x,y
+        x=1920/360
+        y=1080/360
         print('Now we have moved it to {0}'.format(mouse.position))
-
-        # mouse.move(x,y)
-        mouse.move(x+(-LEFT)+RIGHT,y+UP+(-DOWN))
-        time.sleep(2)
-        print('Now we have moved it to {0}'.format(mouse.position))
-
-        # mouse.move(x,y)
-        # mouse.move(x-90,y)
+        mouse.move((-LEFT*x)+(RIGHT*x),(UP*y)+(-DOWN*y))
         # time.sleep(2)
         # print('Now we have moved it to {0}'.format(mouse.position))
 
-        # mouse.move(x,y)
-        # mouse.move(x,y+90)
-        # time.sleep(2)
-        # print('Now we have moved it to {0}'.format(mouse.position))
-
-        # mouse.move(x,y)
-        # mouse.move(x,y-90)
-        # time.sleep(2)
-        # print('Now we have moved it to {0}'.format(mouse.position))
 
 # Todo Add Callbacks
 

@@ -124,13 +124,13 @@ class GameManager():
                                             self.moves.reload_shot(command[3])
                                         else:
                                             self.moves.reload_shot()
-                                    # elif "PING" == command[4]:
-                                    #     self.moves.ping(command[5])
-                                    # elif "MACRO" == command[6]:
-                                    #     self.moves.macro(command[7])
-                                    # elif command[8] != None:
-                                    #     print('Single use: ',self.moves.settings[command[8].replace(" ", "")])
-                                    #     self.moves.corresponding_event(self.moves.settings[command[8].replace(" ", "")],[.01,.01])
+                                    elif "PING" == command[4]:
+                                        self.moves.ping(command[5])
+                                    elif "MACRO" == command[6]:
+                                        self.moves.macro(command[7])
+                                    elif command[8] != None:
+                                        print('Single use: ',self.moves.settings[command[8].replace(" ", "")])
+                                        self.moves.corresponding_event(self.moves.settings[command[8].replace(" ", "")],[.01,.01])
                                     elif "ROTATE" == command[9]:
                                         print(command[10],command[11],command[12],command[13])
                                         print(0 if command[10] is None else float(command[10]))

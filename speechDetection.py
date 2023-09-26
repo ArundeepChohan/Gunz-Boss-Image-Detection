@@ -38,9 +38,10 @@ class SpeechDetection:
         }
 
         try:
-            response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US').upper()
+            response["transcription"] = self.recognizer.recognize_google(audio, language= 'en-US',show_all=False).upper()
+            print('Intial: ',response["transcription"])
             parts = re.findall(r'\D+|\d+', response["transcription"])
-            print("Parts",parts)
+            print("Parts: ",parts)
             words = ' '.join(parts)
             print('Words: ',words)
             o = []
